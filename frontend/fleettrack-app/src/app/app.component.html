@@ -1,0 +1,56 @@
+<aside
+  *ngIf="isAuthenticated()"
+  class="fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-slate-900 text-slate-300"
+>
+  <div class="flex h-16 items-center gap-2.5 border-b border-slate-800 px-5">
+    <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500">
+      <svg lucideIcon="car" [size]="18" [strokeWidth]="2" color="white" />
+    </span>
+    <span class="text-lg font-bold tracking-tight text-white">FleetTrack</span>
+  </div>
+
+  <nav class="mt-4 flex flex-col gap-1 px-3">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-slate-800 border-indigo-500 text-white"
+      class="flex items-center gap-3 rounded-md border-l-2 border-transparent px-3 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+    >
+      <svg lucideIcon="layout-dashboard" [size]="20" [strokeWidth]="1.75" />
+      Dashboard
+    </a>
+    <a
+      routerLink="/vehicles"
+      routerLinkActive="bg-slate-800 border-indigo-500 text-white"
+      class="flex items-center gap-3 rounded-md border-l-2 border-transparent px-3 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+    >
+      <svg lucideIcon="car" [size]="20" [strokeWidth]="1.75" />
+      Vehicles
+    </a>
+  </nav>
+
+  <div class="mt-auto border-t border-slate-800 p-4">
+    <div class="flex items-center gap-3">
+      <span
+        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-sm font-semibold text-white"
+      >
+        {{ initials() }}
+      </span>
+      <div class="min-w-0">
+        <p class="truncate text-sm font-medium text-white">{{ currentUser()?.fullName }}</p>
+        <p class="truncate text-xs text-slate-400">{{ currentUser()?.email }}</p>
+      </div>
+    </div>
+    <button
+      type="button"
+      (click)="logout()"
+      class="mt-3 flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800/60 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+    >
+      <svg lucideIcon="log-out" [size]="20" [strokeWidth]="1.75" />
+      Log out
+    </button>
+  </div>
+</aside>
+
+<main class="min-h-screen" [class.ml-64]="isAuthenticated()">
+  <router-outlet />
+</main>

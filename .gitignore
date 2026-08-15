@@ -1,0 +1,21 @@
+# .NET
+bin/
+obj/
+*.user
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Secrets / local config (never commit real credentials)
+*.secrets.json
+.env
+.env.local
+secrets.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/FleetTrack.Api/FleetTrack.Api.csproj" />
+  </Folder>
+</Solution>
