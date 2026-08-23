@@ -26,8 +26,16 @@ public class DashboardService : IDashboardService
         var totalVehicles = await _db.Vehicles.CountAsync();
 
         var totalLifetimeCost = await _db.MaintenanceLogs.SumAsync(l => (decimal?)l.Cost) ?? 0m;
+
+        var prevMonthStart = monthStart.AddMonths(-1);
         var costThisMonth = await _db.MaintenanceLogs
             .Where(l => l.ServiceDate >= monthStart)
+            .SumAsync(l => (decimal?)l.Cost) ?? 0m;
+        var costPreviousMonth = await _db.MaintenanceLogs
+            .Where(l => l.ServiceDate >= prevMonthStart && l.ServiceDate < monthStart)
+            .SumAsync(l => (decimal?)l.Cost) ?? 0m;
+        var lifetimeCostBeforeThisMonth = await _db.MaintenanceLogs
+            .Where(l => l.ServiceDate < monthStart)
             .SumAsync(l => (decimal?)l.Cost) ?? 0m;
         var costThisYear = await _db.MaintenanceLogs
             .Where(l => l.ServiceDate >= yearStart)
@@ -38,6 +46,9 @@ public class DashboardService : IDashboardService
             : 0m;
 
         var vehiclesDueForService = (await _vehicleService.GetDueForServiceAsync()).Count;
+
+        var activeVehiclesBeforeThisMonth = await _db.Vehicles
+            .CountAsync(v => v.IsActive && v.CreatedAt < monthStart.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc));
 
         var recentLogs = await _db.MaintenanceLogs
             .AsNoTracking()
@@ -52,7 +63,16 @@ public class DashboardService : IDashboardService
             costThisYear,
             averageCostPerVehicle,
             vehiclesDueForService,
-            recentLogs.Select(ToDto).ToList());
+            recentLogs.Select(ToDto).ToList(),
+            PercentChange(totalActiveVehicles, activeVehiclesBeforeThisMonth),
+            PercentChange(totalLifetimeCost, lifetimeCostBeforeThisMonth),
+            PercentChange(costThisMonth, costPreviousMonth),
+            null);
+    }
+
+    private static decimal? PercentChange(decimal current, decimal previous)
+    {
+        return previous == 0m ? null : Math.Round((current - previous) / previous * 100m, 1);
     }
 
     public async Task<List<CostTrendPointDto>> GetCostTrendAsync(int months)

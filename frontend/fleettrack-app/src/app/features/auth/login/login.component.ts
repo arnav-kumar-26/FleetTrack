@@ -5,65 +5,62 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { AuthService } from '../../../core/services/auth.service';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon],
+  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon, ButtonComponent],
   template: `
-    <div class="flex min-h-screen items-center justify-center bg-slate-50">
+    <div class="flex min-h-screen items-center justify-center bg-page">
       <form
         [formGroup]="form"
         (ngSubmit)="onSubmit()"
-        class="w-full max-w-sm space-y-4 rounded-xl border border-slate-200 bg-white p-8 shadow-xl"
+        class="w-full max-w-sm space-y-4 rounded-shell bg-shell p-8 shadow-shell"
         animate.enter="fade-in-up"
       >
-        <h1 class="text-2xl font-bold text-gray-900">FleetTrack</h1>
-        <p class="text-sm text-gray-500">Sign in to your account</p>
+        <h1 class="text-page-title font-bold text-title">FleetTrack</h1>
+        <p class="text-sm text-muted">Sign in to your account</p>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <label for="email" class="block text-meta font-normal text-muted">Email</label>
           <div class="relative">
             <svg
               lucideIcon="mail"
-              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
             />
             <input
               id="email"
               type="email"
               formControlName="email"
               autocomplete="email"
-              class="mt-1 block w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline py-2 pl-9 pr-3 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+          <label for="password" class="block text-meta font-normal text-muted">Password</label>
           <div class="relative">
             <svg
               lucideIcon="lock"
-              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted"
             />
             <input
               id="password"
               type="password"
               formControlName="password"
               autocomplete="current-password"
-              class="mt-1 block w-full rounded-md border border-gray-300 py-2 pl-9 pr-3 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline py-2 pl-9 pr-3 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
         </div>
 
         <p *ngIf="errorMessage" class="text-sm text-red-600" role="alert">{{ errorMessage }}</p>
 
-        <button
-          type="submit"
-          [disabled]="submitting || form.invalid"
-          class="w-full rounded-md bg-indigo-600 py-2 font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:opacity-50"
-        >
+        <app-button type="submit" class="w-full" [disabled]="submitting || form.invalid">
           Sign in
-        </button>
+        </app-button>
       </form>
     </div>
   `,

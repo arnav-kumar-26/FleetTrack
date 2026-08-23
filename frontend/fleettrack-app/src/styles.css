@@ -1,8 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&display=swap');
 @import "tailwindcss";
 @import "./app/core/styles/motion.css";
 
-@theme {
+@theme static {
   --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  --color-page: #FFFFFF;
+  --color-shell: #FFFFFF;
+  --color-canvas: #F7F8F9;
+  --color-card: #FFFFFF;
+  --color-input: #F3F4F5;
+  --color-brand-deep: #0F3A2C;
+  --color-brand-mid: #1B6E4C;
+  --color-accent-mint: #4FB477;
+  --color-hatch-pale: #F7F7F7;
+  --color-title: #111827;
+  --color-body: #1F2937;
+  --color-muted: #98A2B3;
+  --color-on-dark: #FFFFFF;
+  --color-on-dark-muted: #8FE3B3;
+  --color-pill-completed-bg: #E3F6E8;
+  --color-pill-completed-text: #1E8A4C;
+  --color-pill-progress-bg: #FDF1DC;
+  --color-pill-progress-text: #B98900;
+  --color-pill-pending-bg: #FDEAEA;
+  --color-pill-pending-text: #E0524A;
+  --color-chip-blue: #DCEBFC;
+  --color-chip-teal: #DDF3E8;
+  --color-chip-violet: #EAE2FB;
+  --color-chip-amber: #FCEBD2;
+  --color-hairline: #E9EAEC;
+
+  --radius-shell: 20px;
+  --radius-card: 16px;
+  --radius-button: 13px;
+  --radius-icon-chip: 10px;
+
+  --shadow-shell: 0 20px 40px rgba(16, 24, 32, 0.06);
+  --shadow-popover: 0 8px 20px rgba(16, 24, 32, 0.12);
+
+  --spacing-card-padding: 24px;
+  --spacing-grid-gutter: 8px;
+  --spacing-nav-item-y: 8px;
+
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --text-page-title: 2.5rem;
+  --text-stat-number: 3rem;
+  --text-card-header: 1rem;
+  --text-meta: 0.8125rem;
+}
+
+:root {
+  --sidebar-width: 220px;
+}
+
+body {
+  background: var(--color-page);
 }
 
 @keyframes shimmer {

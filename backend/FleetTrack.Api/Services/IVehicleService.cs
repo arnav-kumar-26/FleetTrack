@@ -10,6 +10,7 @@ public interface IVehicleService
     Task<List<VehicleDto>> GetDueForServiceAsync();
     Task<VehicleDto> CreateAsync(VehicleCreateDto dto);
     Task<VehicleDto?> UpdateAsync(int id, VehicleUpdateDto dto);
-    Task<bool> ArchiveAsync(int id);
+    Task<bool> SetArchivedAsync(int id, bool archived);
+    Task<bool> DeleteAsync(int id);
     Task<List<MaintenanceLogDto>> GetMaintenanceLogsForVehicleAsync(int id);
 }

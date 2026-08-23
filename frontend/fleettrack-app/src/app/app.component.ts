@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { LucideDynamicIcon } from '@lucide/angular';
+import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { HeaderComponent } from './layout/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, LucideDynamicIcon],
+  imports: [CommonModule, RouterOutlet, SidebarComponent, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -50,11 +50,25 @@ public class VehiclesController : ControllerBase
         return vehicle is null ? NotFound() : Ok(vehicle);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpPut("{id:int}/archive")]
     public async Task<IActionResult> Archive(int id)
     {
-        var archived = await _vehicleService.ArchiveAsync(id);
+        var archived = await _vehicleService.SetArchivedAsync(id, archived: true);
         return archived ? NoContent() : NotFound();
+    }
+
+    [HttpPut("{id:int}/unarchive")]
+    public async Task<IActionResult> Unarchive(int id)
+    {
+        var unarchived = await _vehicleService.SetArchivedAsync(id, archived: false);
+        return unarchived ? NoContent() : NotFound();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var deleted = await _vehicleService.DeleteAsync(id);
+        return deleted ? NoContent() : NotFound();
     }
 
     [HttpGet("{id:int}/maintenance-logs")]

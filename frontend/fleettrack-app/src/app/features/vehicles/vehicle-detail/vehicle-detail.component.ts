@@ -9,6 +9,7 @@ import { MaintenanceLog } from '../../../core/models/maintenance-log.model';
 import { staggerDelay } from '../../../core/utils/stagger.util';
 import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.component';
 import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenance-log-drawer/maintenance-log-drawer.component';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-vehicle-detail',
@@ -19,43 +20,58 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
     LucideDynamicIcon,
     VehicleDrawerComponent,
     MaintenanceLogDrawerComponent,
+    ButtonComponent,
   ],
   template: `
-    <div class="p-6">
-      <a routerLink="/vehicles" class="text-sm text-blue-600 hover:underline">← Back to vehicles</a>
+    <div class="p-4">
+      <a routerLink="/vehicles" class="text-sm text-brand-mid hover:underline">← Back to vehicles</a>
 
-      <p *ngIf="loading()" class="mt-4 text-sm text-gray-500">Loading…</p>
-      <p *ngIf="errorMessage()" class="mt-4 text-sm text-red-600">{{ errorMessage() }}</p>
+      <p *ngIf="loading()" class="mt-3 text-sm text-muted">Loading…</p>
+      <p *ngIf="errorMessage()" class="mt-3 text-sm text-red-600">{{ errorMessage() }}</p>
 
       <ng-container *ngIf="vehicle() as vehicle">
-        <div class="mt-4 flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-gray-900">
+        <div class="mt-3 flex items-center justify-between">
+          <h1 class="text-page-title font-light text-title">
             {{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
           </h1>
-          <div class="flex items-center gap-3">
-            <button
-              type="button"
-              (click)="openEdit(vehicle)"
-              class="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 transition-transform duration-150 ease-out hover:bg-gray-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-            >
+          <div class="flex items-center gap-2">
+            <app-button variant="outlined" (click)="openEdit(vehicle)">
               <svg lucideIcon="pencil" [size]="16" />
               Edit
-            </button>
-            <button
-              type="button"
-              (click)="openAddLog()"
-              class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-            >
+            </app-button>
+            <app-button (click)="openAddLog()">
               <svg lucideIcon="plus" [size]="16" />
               Add Log
-            </button>
+            </app-button>
+            @if (vehicle.isActive) {
+              <button
+                type="button"
+                (click)="archive()"
+                aria-label="Archive vehicle"
+                class="flex items-center gap-2 rounded-full border-[1.5px] border-pill-progress-text px-4 py-2 text-sm font-normal text-pill-progress-text transition-transform duration-150 ease-out hover:bg-pill-progress-bg active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pill-progress-text"
+              >
+                <svg lucideIcon="archive" [size]="16" />
+                Archive
+              </button>
+            } @else {
+              <button
+                type="button"
+                (click)="unarchive()"
+                aria-label="Unarchive vehicle"
+                class="flex items-center gap-2 rounded-full border-[1.5px] border-pill-progress-text px-4 py-2 text-sm font-normal text-pill-progress-text transition-transform duration-150 ease-out hover:bg-pill-progress-bg active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pill-progress-text"
+              >
+                <svg lucideIcon="archive-restore" [size]="16" />
+                Unarchive
+              </button>
+            }
             <button
               type="button"
-              (click)="archive()"
-              class="flex items-center gap-2 rounded-md border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 transition-transform duration-150 ease-out hover:bg-red-50 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+              (click)="removeVehicle()"
+              aria-label="Delete vehicle permanently"
+              class="flex items-center gap-2 rounded-full bg-pill-pending-text px-4 py-2 text-sm font-normal text-white transition-transform duration-150 ease-out hover:brightness-95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pill-pending-text"
             >
               <svg lucideIcon="trash-2" [size]="16" />
-              Archive
+              Delete
             </button>
           </div>
         </div>
@@ -63,68 +79,68 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
         <div class="mt-2 flex flex-wrap gap-2">
           <span
             *ngIf="vehicle.isServiceDue"
-            class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700"
+            class="inline-flex items-center gap-1 rounded-full bg-pill-progress-bg px-2.5 py-0.5 text-xs font-normal text-pill-progress-text"
           >
-            <svg lucideIcon="triangle-alert" [size]="12" class="text-amber-600" />
+            <svg lucideIcon="triangle-alert" [size]="12" />
             Due for service
           </span>
           <span
             *ngIf="!vehicle.isActive"
-            class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+            class="inline-flex items-center rounded-full bg-input px-2.5 py-0.5 text-xs font-normal text-muted"
           >
             Archived
           </span>
           <span
             *ngIf="!vehicle.isServiceDue && vehicle.isActive"
-            class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700"
+            class="inline-flex items-center rounded-full bg-pill-completed-bg px-2.5 py-0.5 text-xs font-normal text-pill-completed-text"
           >
             Active
           </span>
         </div>
 
-        <dl class="mt-6 grid grid-cols-2 gap-4 rounded-lg border border-slate-200 bg-white p-6 text-sm md:grid-cols-3">
+        <dl class="mt-3 grid grid-cols-2 gap-4 rounded-card border border-hairline bg-card p-card-padding text-sm md:grid-cols-3">
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Plate number</dt>
-            <dd class="mt-1 font-semibold text-gray-900">{{ vehicle.plateNumber }}</dd>
+            <dt class="text-meta font-normal uppercase text-muted">Plate number</dt>
+            <dd class="mt-1 font-medium text-body">{{ vehicle.plateNumber }}</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Current mileage</dt>
-            <dd class="mt-1 font-semibold text-gray-900">{{ vehicle.currentMileage | number }} km</dd>
+            <dt class="text-meta font-normal uppercase text-muted">Current mileage</dt>
+            <dd class="mt-1 font-medium text-body">{{ vehicle.currentMileage | number }} km</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Service interval</dt>
-            <dd class="mt-1 text-gray-900">
+            <dt class="text-meta font-normal uppercase text-muted">Service interval</dt>
+            <dd class="mt-1 font-medium text-body">
               {{ vehicle.serviceIntervalMonths ? vehicle.serviceIntervalMonths + ' months' : '—' }}
               /
               {{ vehicle.serviceIntervalMileage ? vehicle.serviceIntervalMileage + ' km' : '—' }}
             </dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Next service due date</dt>
-            <dd class="mt-1 font-semibold text-gray-900">
+            <dt class="text-meta font-normal uppercase text-muted">Next service due date</dt>
+            <dd class="mt-1 font-medium text-body">
               {{ vehicle.nextServiceDueDate ? (vehicle.nextServiceDueDate | date) : '—' }}
             </dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Next service due mileage</dt>
-            <dd class="mt-1 font-semibold text-gray-900">
+            <dt class="text-meta font-normal uppercase text-muted">Next service due mileage</dt>
+            <dd class="mt-1 font-medium text-body">
               {{ vehicle.nextServiceDueMileage ? (vehicle.nextServiceDueMileage | number) + ' km' : '—' }}
             </dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase text-gray-500">Added</dt>
-            <dd class="mt-1 text-gray-900">{{ vehicle.id }}</dd>
+            <dt class="text-meta font-normal uppercase text-muted">Added</dt>
+            <dd class="mt-1 font-medium text-body">{{ vehicle.id }}</dd>
           </div>
         </dl>
 
-        <h2 class="mt-8 text-lg font-bold text-gray-900">Maintenance history</h2>
+        <h2 class="mt-4 text-card-header font-semibold text-title">Maintenance history</h2>
 
         <div
           *ngIf="logs().length > 0"
-          class="mt-3 overflow-x-auto rounded-lg border border-slate-200 bg-white"
+          class="mt-3 overflow-x-auto rounded-card border border-hairline bg-card"
         >
-          <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <thead class="bg-gray-50 text-left text-xs font-medium uppercase text-gray-500">
+          <table class="min-w-full divide-y divide-hairline text-sm">
+            <thead class="bg-input text-left text-meta font-normal uppercase text-muted">
               <tr>
                 <th class="px-4 py-3">Date</th>
                 <th class="px-4 py-3">Description</th>
@@ -133,24 +149,24 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
                 <th class="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-hairline">
               <tr
                 *ngFor="let log of logs(); let i = index"
-                class="transition-colors hover:bg-slate-50"
+                class="transition-colors hover:bg-input"
                 animate.enter="fade-in-up"
                 [style.animation-delay.ms]="staggerDelay(i)"
               >
-                <td class="px-4 py-3 text-gray-600">{{ log.serviceDate | date }}</td>
-                <td class="px-4 py-3 text-gray-900">{{ log.description }}</td>
-                <td class="px-4 py-3 text-gray-600">{{ log.cost | currency }}</td>
-                <td class="px-4 py-3 text-gray-600">{{ log.mileageAtService | number }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ log.serviceDate | date }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ log.description }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ log.cost | currency:'INR':'symbol-narrow' }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ log.mileageAtService | number }}</td>
                 <td class="px-4 py-3">
                   <div class="flex items-center justify-end gap-1">
                     <button
                       type="button"
                       [attr.aria-label]="'Edit log: ' + log.description"
                       (click)="openEditLog(log)"
-                      class="rounded-md p-2 text-slate-500 transition-transform duration-150 ease-out hover:scale-105 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95"
+                      class="rounded-md p-2 text-muted transition-transform duration-150 ease-out hover:scale-105 hover:bg-input hover:text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-mid active:scale-95"
                     >
                       <svg lucideIcon="pencil" [size]="18" />
                     </button>
@@ -158,7 +174,7 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
                       type="button"
                       [attr.aria-label]="'Delete log: ' + log.description"
                       (click)="deleteLog(log)"
-                      class="rounded-md p-2 text-slate-500 transition-transform duration-150 ease-out hover:scale-105 hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 active:scale-95"
+                      class="rounded-md p-2 text-muted transition-transform duration-150 ease-out hover:scale-105 hover:bg-pill-pending-bg hover:text-pill-pending-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pill-pending-text active:scale-95"
                     >
                       <svg lucideIcon="trash-2" [size]="18" />
                     </button>
@@ -171,11 +187,11 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
 
         <div
           *ngIf="logs().length === 0"
-          class="mt-3 flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 bg-white px-6 py-16 text-center"
+          class="mt-3 flex flex-col items-center justify-center rounded-card border border-dashed border-hairline bg-card px-6 py-16 text-center"
           animate.enter="fade-in-up"
         >
           <svg
-            class="h-24 w-24 text-slate-300"
+            class="h-24 w-24 text-muted"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -189,16 +205,12 @@ import { MaintenanceLogDrawerComponent } from '../../maintenance-logs/maintenanc
             <path d="M9 12h6" />
             <path d="M9 16h6" />
           </svg>
-          <h3 class="mt-4 text-lg font-semibold text-gray-900">No maintenance logs yet</h3>
-          <p class="mt-1 text-sm text-gray-500">Add the first maintenance log to track this vehicle's service history.</p>
-          <button
-            type="button"
-            (click)="openAddLog()"
-            class="mt-5 flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-          >
+          <h3 class="mt-4 text-lg font-medium text-title">No maintenance logs yet</h3>
+          <p class="mt-1 text-sm text-muted">Add the first maintenance log to track this vehicle's service history.</p>
+          <app-button class="mt-5" (click)="openAddLog()">
             <svg lucideIcon="plus" [size]="18" />
             Add Maintenance Log
-          </button>
+          </app-button>
         </div>
       </ng-container>
     </div>
@@ -303,6 +315,41 @@ export class VehicleDetailComponent implements OnInit {
       next: () => this.router.navigate(['/vehicles']),
       error: () => {
         this.errorMessage.set('Failed to archive vehicle.');
+      },
+    });
+  }
+
+  unarchive() {
+    const vehicle = this.vehicle();
+    if (!vehicle) {
+      return;
+    }
+
+    this.vehicleService.unarchive(vehicle.id).subscribe({
+      next: () => this.reloadVehicle(),
+      error: () => {
+        this.errorMessage.set('Failed to unarchive vehicle.');
+      },
+    });
+  }
+
+  removeVehicle() {
+    const vehicle = this.vehicle();
+    if (!vehicle) {
+      return;
+    }
+
+    const ok = confirm(
+      `Permanently delete ${vehicle.year} ${vehicle.make} ${vehicle.model} and all of its maintenance logs? This cannot be undone.`
+    );
+    if (!ok) {
+      return;
+    }
+
+    this.vehicleService.delete(vehicle.id).subscribe({
+      next: () => this.router.navigate(['/vehicles']),
+      error: () => {
+        this.errorMessage.set('Failed to delete vehicle.');
       },
     });
   }

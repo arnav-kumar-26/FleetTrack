@@ -91,7 +91,7 @@ public class VehicleService : IVehicleService
         return ToDto(vehicle, latest);
     }
 
-    public async Task<bool> ArchiveAsync(int id)
+    public async Task<bool> SetArchivedAsync(int id, bool archived)
     {
         var vehicle = await _db.Vehicles.FindAsync(id);
         if (vehicle is null)
@@ -99,7 +99,22 @@ public class VehicleService : IVehicleService
             return false;
         }
 
-        vehicle.IsActive = false;
+        vehicle.IsActive = !archived;
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var vehicle = await _db.Vehicles.FindAsync(id);
+        if (vehicle is null)
+        {
+            return false;
+        }
+
+        var logs = _db.MaintenanceLogs.Where(l => l.VehicleId == id);
+        _db.MaintenanceLogs.RemoveRange(logs);
+        _db.Vehicles.Remove(vehicle);
         await _db.SaveChangesAsync();
         return true;
     }

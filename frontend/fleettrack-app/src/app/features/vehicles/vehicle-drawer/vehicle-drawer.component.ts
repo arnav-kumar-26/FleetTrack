@@ -15,11 +15,12 @@ import { LucideDynamicIcon } from '@lucide/angular';
 import { Router } from '@angular/router';
 import { Vehicle, VehicleCreateRequest, VehicleUpdateRequest } from '../../../core/models/vehicle.model';
 import { VehicleService } from '../../../core/services/vehicle.service';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-vehicle-drawer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon],
+  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon, ButtonComponent],
   template: `
     @if (isOpen()) {
       <div class="fixed inset-0 z-50 bg-black/40" animate.enter="fade-in-up" (click)="close()"></div>
@@ -28,20 +29,20 @@ import { VehicleService } from '../../../core/services/vehicle.service';
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="isEdit() ? 'Edit vehicle' : 'New vehicle'"
-        class="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-white shadow-xl"
+        class="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-shell shadow-popover"
         animate.enter="drawer-slide-in"
         animate.leave="drawer-slide-out"
         (keydown)="onPanelKeydown($event)"
         tabindex="-1"
       >
-        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 class="text-lg font-bold text-gray-900">{{ isEdit() ? 'Edit Vehicle' : 'New Vehicle' }}</h2>
+        <div class="flex items-center justify-between border-b border-hairline px-6 py-4">
+          <h2 class="text-card-header font-semibold text-title">{{ isEdit() ? 'Edit Vehicle' : 'New Vehicle' }}</h2>
           <button
             #closeBtn
             type="button"
             (click)="close()"
             aria-label="Close"
-            class="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            class="rounded-md p-1.5 text-muted transition-colors hover:bg-input hover:text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-mid"
           >
             <svg lucideIcon="x" [size]="18" />
           </button>
@@ -53,101 +54,96 @@ import { VehicleService } from '../../../core/services/vehicle.service';
           class="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-5"
         >
           <div>
-            <label for="make" class="block text-sm font-medium text-gray-700">Make</label>
+            <label for="make" class="block text-meta font-normal text-muted">Make</label>
             <input
               id="make"
               formControlName="make"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
 
           <div>
-            <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+            <label for="model" class="block text-meta font-normal text-muted">Model</label>
             <input
               id="model"
               formControlName="model"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
 
           <div>
-            <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+            <label for="year" class="block text-meta font-normal text-muted">Year</label>
             <input
               id="year"
               type="number"
               formControlName="year"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
 
           <div>
-            <label for="plateNumber" class="block text-sm font-medium text-gray-700">Plate number</label>
+            <label for="plateNumber" class="block text-meta font-normal text-muted">Plate number</label>
             <input
               id="plateNumber"
               formControlName="plateNumber"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-100"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20 disabled:bg-input"
             />
-            <p *ngIf="isEdit()" class="mt-1 text-xs text-gray-500">Plate number cannot be changed.</p>
+            <p *ngIf="isEdit()" class="mt-1 text-xs text-muted">Plate number cannot be changed.</p>
           </div>
 
           <div>
-            <label for="currentMileage" class="block text-sm font-medium text-gray-700">Current mileage</label>
+            <label for="currentMileage" class="block text-meta font-normal text-muted">Current mileage</label>
             <input
               id="currentMileage"
               type="number"
               formControlName="currentMileage"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:bg-gray-100"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20 disabled:bg-input"
             />
-            <p *ngIf="isEdit()" class="mt-1 text-xs text-gray-500">
+            <p *ngIf="isEdit()" class="mt-1 text-xs text-muted">
               Mileage is updated automatically from maintenance logs.
             </p>
           </div>
 
           <div>
-            <label for="serviceIntervalMonths" class="block text-sm font-medium text-gray-700">
+            <label for="serviceIntervalMonths" class="block text-meta font-normal text-muted">
               Service interval (months)
             </label>
             <input
               id="serviceIntervalMonths"
               type="number"
               formControlName="serviceIntervalMonths"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
-            <p class="mt-1 text-xs text-gray-500">Optional. Used to estimate the next service due date.</p>
+            <p class="mt-1 text-xs text-muted">Optional. Used to estimate the next service due date.</p>
           </div>
 
           <div>
-            <label for="serviceIntervalMileage" class="block text-sm font-medium text-gray-700">
+            <label for="serviceIntervalMileage" class="block text-meta font-normal text-muted">
               Service interval (mileage)
             </label>
             <input
               id="serviceIntervalMileage"
               type="number"
               formControlName="serviceIntervalMileage"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
-            <p class="mt-1 text-xs text-gray-500">Optional. Used to estimate the next service due mileage.</p>
+            <p class="mt-1 text-xs text-muted">Optional. Used to estimate the next service due mileage.</p>
           </div>
 
           <p *ngIf="errorMessage()" class="text-sm text-red-600" role="alert">{{ errorMessage() }}</p>
         </form>
 
-        <div class="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
-          <button
-            type="button"
-            (click)="close()"
-            class="rounded-md px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-          >
+        <div class="flex items-center justify-end gap-3 border-t border-hairline px-6 py-4">
+          <app-button variant="outlined" (click)="close()">
             Cancel
-          </button>
-          <button
+          </app-button>
+          <app-button
             type="submit"
             [disabled]="submitting() || form.invalid"
             (click)="onSubmit()"
-            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
             Save
-          </button>
+          </app-button>
         </div>
       </div>
     }

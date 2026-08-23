@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { MaintenanceLog } from '../../../core/models/maintenance-log.model';
 import { MaintenanceLogService } from '../../../core/services/maintenance-log.service';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-maintenance-log-drawer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon],
+  imports: [CommonModule, ReactiveFormsModule, LucideDynamicIcon, ButtonComponent],
   template: `
     @if (isOpen()) {
       <div class="fixed inset-0 z-50 bg-black/40" animate.enter="fade-in-up" (click)="close()"></div>
@@ -17,21 +18,21 @@ import { MaintenanceLogService } from '../../../core/services/maintenance-log.se
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="isEdit() ? 'Edit maintenance log' : 'Add maintenance log'"
-        class="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-white shadow-xl"
+        class="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-shell shadow-popover"
         animate.enter="drawer-slide-in"
         animate.leave="drawer-slide-out"
         (keydown)="onPanelKeydown($event)"
         tabindex="-1"
       >
-        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h2 class="text-lg font-bold text-gray-900">
+        <div class="flex items-center justify-between border-b border-hairline px-6 py-4">
+          <h2 class="text-card-header font-semibold text-title">
             {{ isEdit() ? 'Edit Maintenance Log' : 'Add Maintenance Log' }}
           </h2>
           <button
             type="button"
             (click)="close()"
             aria-label="Close"
-            class="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            class="rounded-md p-1.5 text-muted transition-colors hover:bg-input hover:text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-mid"
           >
             <svg lucideIcon="x" [size]="18" />
           </button>
@@ -43,39 +44,39 @@ import { MaintenanceLogService } from '../../../core/services/maintenance-log.se
           class="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-5"
         >
           <div>
-            <label for="serviceDate" class="block text-sm font-medium text-gray-700">Service date</label>
+            <label for="serviceDate" class="block text-meta font-normal text-muted">Service date</label>
             <input
               id="serviceDate"
               type="date"
               formControlName="serviceDate"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
 
           <div>
-            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <label for="description" class="block text-meta font-normal text-muted">Description</label>
             <textarea
               id="description"
               rows="3"
               formControlName="description"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             ></textarea>
           </div>
 
           <div>
-            <label for="cost" class="block text-sm font-medium text-gray-700">Cost</label>
+            <label for="cost" class="block text-meta font-normal text-muted">Cost</label>
             <input
               id="cost"
               type="number"
               step="0.01"
               min="0"
               formControlName="cost"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
           </div>
 
           <div>
-            <label for="mileageAtService" class="block text-sm font-medium text-gray-700">
+            <label for="mileageAtService" class="block text-meta font-normal text-muted">
               Mileage at service (km)
             </label>
             <input
@@ -83,9 +84,9 @@ import { MaintenanceLogService } from '../../../core/services/maintenance-log.se
               type="number"
               min="0"
               formControlName="mileageAtService"
-              class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 transition-colors duration-200 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body transition-colors duration-200 focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
             />
-            <p class="mt-1 text-xs text-gray-500">
+            <p class="mt-1 text-xs text-muted">
               The vehicle's current mileage is updated automatically when this is higher than the current value.
             </p>
           </div>
@@ -93,22 +94,17 @@ import { MaintenanceLogService } from '../../../core/services/maintenance-log.se
           <p *ngIf="errorMessage()" class="text-sm text-red-600" role="alert">{{ errorMessage() }}</p>
         </form>
 
-        <div class="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
-          <button
-            type="button"
-            (click)="close()"
-            class="rounded-md px-4 py-2 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-          >
+        <div class="flex items-center justify-end gap-3 border-t border-hairline px-6 py-4">
+          <app-button variant="outlined" (click)="close()">
             Cancel
-          </button>
-          <button
+          </app-button>
+          <app-button
             type="submit"
             [disabled]="submitting() || form.invalid"
             (click)="onSubmit()"
-            class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           >
             {{ isEdit() ? 'Save changes' : 'Save log' }}
-          </button>
+          </app-button>
         </div>
       </div>
     }

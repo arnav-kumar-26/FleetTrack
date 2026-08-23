@@ -1,0 +1,77 @@
+<header class="header z-20">
+  <div class="search-box">
+    <svg lucideIcon="search" [size]="18" class="search-icon" />
+    <input type="text" placeholder="Search" aria-label="Search" class="search-input" />
+  </div>
+
+  <div class="header-actions">
+    <div class="menu-anchor">
+      <button
+        type="button"
+        class="icon-btn"
+        (click)="toggleMenu('messages')"
+        aria-label="Messages"
+        aria-haspopup="menu"
+        [class.is-open]="openMenu() === 'messages'"
+        [attr.aria-expanded]="openMenu() === 'messages'"
+      >
+        <svg lucideIcon="mail" [size]="20" />
+      </button>
+      @if (openMenu() === 'messages') {
+        <div class="dropdown-menu" role="menu" aria-label="Messages">
+          @for (message of messages; track $index) {
+            <div class="dropdown-item" role="menuitem">
+              <p class="dropdown-item-title">{{ message.title }}</p>
+              @if (message.body) {
+                <p class="dropdown-item-body">{{ message.body }}</p>
+              }
+            </div>
+          } @empty {
+            <div class="dropdown-empty">No messages</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="menu-anchor">
+      <button
+        type="button"
+        class="icon-btn"
+        (click)="toggleMenu('notifications')"
+        aria-label="Notifications"
+        aria-haspopup="menu"
+        [class.is-open]="openMenu() === 'notifications'"
+        [attr.aria-expanded]="openMenu() === 'notifications'"
+      >
+        <svg lucideIcon="bell" [size]="20" />
+        <span class="notification-badge"></span>
+      </button>
+      @if (openMenu() === 'notifications') {
+        <div class="dropdown-menu" role="menu" aria-label="Notifications">
+          @for (notification of notifications; track $index) {
+            <div class="dropdown-item" role="menuitem">
+              <p class="dropdown-item-title">{{ notification.title }}</p>
+              @if (notification.body) {
+                <p class="dropdown-item-body">{{ notification.body }}</p>
+              }
+            </div>
+          } @empty {
+            <div class="dropdown-empty">No notifications</div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="profile-block">
+      <app-avatar [name]="initials" />
+      <span class="profile-meta">
+        <span class="profile-name">{{ currentUser?.fullName }}</span>
+        <span class="profile-role">{{ currentUser?.email }}</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+@if (openMenu() !== null) {
+  <div class="menu-backdrop" (click)="closeMenu()"></div>
+}

@@ -32,6 +32,14 @@ export class VehicleService {
   }
 
   archive(id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}/archive`, {});
+  }
+
+  unarchive(id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${id}/unarchive`, {});
+  }
+
+  delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 

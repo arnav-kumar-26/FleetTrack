@@ -8,6 +8,10 @@ export interface DashboardSummary {
   averageCostPerVehicle: number;
   vehiclesDueForService: number;
   recentLogs: MaintenanceLog[];
+  activeVehiclesChangePercent: number | null;
+  lifetimeCostChangePercent: number | null;
+  costThisMonthChangePercent: number | null;
+  dueForServiceChangePercent: number | null;
 }
 
 export interface CostTrendPoint {
