@@ -1,0 +1,8 @@
+:host {
+  display: block;
+  background: #ffffff;
+}
+
+.canvas {
+  background: var(--color-hatch-pale);
+}

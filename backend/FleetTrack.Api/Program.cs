@@ -75,6 +75,12 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+if (args.Contains("--seed"))
+{
+    using var seedScope = app.Services.CreateScope();
+    await DbSeeder.SeedAsync(seedScope.ServiceProvider.GetRequiredService<FleetTrackDbContext>());
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

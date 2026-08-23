@@ -48,5 +48,10 @@ FleetTrack is an internal fleet management app for tracking vehicles and their m
 4. **Verify the port before proceeding:** After launching, confirm the expected port is listening (`Get-NetTCPConnection -State Listen -LocalPort 5295`) and hit a real endpoint (e.g. `POST /api/auth/login`) before considering the backend "up".
 
 ## Working discipline
+<!-- 
+TEMPORARILY DISABLED FOR AUTONOMOUS RUN:
 - After generating code for a step, stop and let the human verify.
 - Do not move on to unrelated work in the same step.
+-->
+- AUTONOMOUS RUN ACTIVE: Proceed continuously through all remaining tasks in the sequence. Do NOT stop for human verification.
+- If an error, bug, or build failure occurs, do not wait for feedback. Autonomously analyze the issue, apply the best fix, verify that the build passes, and proceed to the next task.

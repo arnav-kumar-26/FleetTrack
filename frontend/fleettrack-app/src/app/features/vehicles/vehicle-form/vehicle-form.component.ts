@@ -4,108 +4,105 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VehicleService } from '../../../core/services/vehicle.service';
 import { VehicleCreateRequest, VehicleUpdateRequest } from '../../../core/models/vehicle.model';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-vehicle-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ButtonComponent],
   template: `
-    <div class="mx-auto max-w-xl p-6">
-      <h1 class="text-2xl font-bold text-gray-900">{{ isEdit ? 'Edit Vehicle' : 'New Vehicle' }}</h1>
+    <div class="mx-auto max-w-xl p-4">
+      <h1 class="text-page-title font-light text-title">{{ isEdit ? 'Edit Vehicle' : 'New Vehicle' }}</h1>
 
       <form
         [formGroup]="form"
         (ngSubmit)="onSubmit()"
-        class="mt-6 space-y-4 rounded-lg border border-gray-200 bg-white p-6"
+        class="mt-3 space-y-4 rounded-card border border-hairline bg-card p-card-padding"
       >
         <div>
-          <label for="make" class="block text-sm font-medium text-gray-700">Make</label>
+          <label for="make" class="block text-meta font-normal text-muted">Make</label>
           <input
             id="make"
             formControlName="make"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
           />
         </div>
 
         <div>
-          <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+          <label for="model" class="block text-meta font-normal text-muted">Model</label>
           <input
             id="model"
             formControlName="model"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
           />
         </div>
 
         <div>
-          <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+          <label for="year" class="block text-meta font-normal text-muted">Year</label>
           <input
             id="year"
             type="number"
             formControlName="year"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
           />
         </div>
 
         <div>
-          <label for="plateNumber" class="block text-sm font-medium text-gray-700">Plate number</label>
+          <label for="plateNumber" class="block text-meta font-normal text-muted">Plate number</label>
           <input
             id="plateNumber"
             formControlName="plateNumber"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20 disabled:bg-input"
           />
-          <p *ngIf="isEdit" class="mt-1 text-xs text-gray-500">Plate number cannot be changed.</p>
+          <p *ngIf="isEdit" class="mt-1 text-xs text-muted">Plate number cannot be changed.</p>
         </div>
 
         <div>
-          <label for="currentMileage" class="block text-sm font-medium text-gray-700">Current mileage</label>
+          <label for="currentMileage" class="block text-meta font-normal text-muted">Current mileage</label>
           <input
             id="currentMileage"
             type="number"
             formControlName="currentMileage"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20 disabled:bg-input"
           />
-          <p *ngIf="isEdit" class="mt-1 text-xs text-gray-500">Mileage is updated automatically from maintenance logs.</p>
+          <p *ngIf="isEdit" class="mt-1 text-xs text-muted">Mileage is updated automatically from maintenance logs.</p>
         </div>
 
         <div>
-          <label for="serviceIntervalMonths" class="block text-sm font-medium text-gray-700">
+          <label for="serviceIntervalMonths" class="block text-meta font-normal text-muted">
             Service interval (months)
           </label>
           <input
             id="serviceIntervalMonths"
             type="number"
             formControlName="serviceIntervalMonths"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
           />
-          <p class="mt-1 text-xs text-gray-500">Optional. Used to estimate the next service due date.</p>
+          <p class="mt-1 text-xs text-muted">Optional. Used to estimate the next service due date.</p>
         </div>
 
         <div>
-          <label for="serviceIntervalMileage" class="block text-sm font-medium text-gray-700">
+          <label for="serviceIntervalMileage" class="block text-meta font-normal text-muted">
             Service interval (mileage)
           </label>
           <input
             id="serviceIntervalMileage"
             type="number"
             formControlName="serviceIntervalMileage"
-            class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border border-hairline px-3 py-2 text-body focus:border-brand-mid focus:outline-none focus:ring-2 focus:ring-brand-mid/20"
           />
-          <p class="mt-1 text-xs text-gray-500">Optional. Used to estimate the next service due mileage.</p>
+          <p class="mt-1 text-xs text-muted">Optional. Used to estimate the next service due mileage.</p>
         </div>
 
         <p *ngIf="errorMessage()" class="text-sm text-red-600">{{ errorMessage() }}</p>
 
         <div class="flex items-center gap-3 pt-2">
-          <button
-            type="submit"
-            [disabled]="submitting() || form.invalid"
-            class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-          >
+          <app-button type="submit" [disabled]="submitting() || form.invalid">
             Save
-          </button>
+          </app-button>
           <a
             [routerLink]="isEdit ? ['/vehicles', vehicleId] : ['/vehicles']"
-            class="text-sm text-gray-500 hover:underline"
+            class="text-sm text-muted hover:underline"
           >
             Cancel
           </a>

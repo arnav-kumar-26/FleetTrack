@@ -9,4 +9,8 @@ public record DashboardSummaryDto(
     decimal CostThisYear,
     decimal AverageCostPerVehicle,
     int VehiclesDueForService,
-    List<MaintenanceLogDto> RecentLogs);
+    List<MaintenanceLogDto> RecentLogs,
+    decimal? ActiveVehiclesChangePercent,
+    decimal? LifetimeCostChangePercent,
+    decimal? CostThisMonthChangePercent,
+    decimal? DueForServiceChangePercent);

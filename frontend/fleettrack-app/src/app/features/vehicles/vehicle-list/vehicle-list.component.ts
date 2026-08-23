@@ -6,35 +6,32 @@ import { VehicleService } from '../../../core/services/vehicle.service';
 import { Vehicle } from '../../../core/models/vehicle.model';
 import { staggerDelay } from '../../../core/utils/stagger.util';
 import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.component';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-vehicle-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, LucideDynamicIcon, VehicleDrawerComponent],
+  imports: [CommonModule, RouterLink, LucideDynamicIcon, VehicleDrawerComponent, ButtonComponent],
   template: `
-    <div class="p-6">
+    <div class="p-4">
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-gray-900">Vehicles</h1>
-        <button
-          type="button"
-          (click)="openNew()"
-          class="flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-        >
+        <h1 class="text-page-title font-light text-title">Vehicles</h1>
+        <app-button (click)="openNew()">
           <svg lucideIcon="plus" [size]="18" />
           New Vehicle
-        </button>
+        </app-button>
       </div>
 
-      <p *ngIf="loading()" class="mt-4 text-sm text-gray-500">Loading…</p>
-      <p *ngIf="errorMessage()" class="mt-4 text-sm text-red-600">{{ errorMessage() }}</p>
+      <p *ngIf="loading()" class="mt-3 text-sm text-muted">Loading…</p>
+      <p *ngIf="errorMessage()" class="mt-3 text-sm text-red-600">{{ errorMessage() }}</p>
 
       <ng-container *ngIf="vehicles() as vehicles">
         <div
           *ngIf="vehicles.length > 0"
-          class="mt-6 overflow-x-auto rounded-lg border border-slate-200 bg-white"
+          class="mt-3 overflow-x-auto rounded-card border border-hairline bg-card"
         >
-          <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <thead class="bg-gray-50 text-left text-xs font-medium uppercase text-gray-500">
+          <table class="min-w-full divide-y divide-hairline text-sm">
+            <thead class="bg-input text-left text-xs font-normal uppercase text-muted">
               <tr>
                 <th class="px-4 py-3">Vehicle</th>
                 <th class="px-4 py-3">Year</th>
@@ -44,41 +41,41 @@ import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.compone
                 <th class="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+<tbody class="divide-y divide-hairline">
               <tr
                 *ngFor="let vehicle of vehicles; let i = index"
-                class="transition-colors hover:bg-slate-50"
+                class="transition-colors hover:bg-input"
                 animate.enter="fade-in-up"
                 [style.animation-delay.ms]="staggerDelay(i)"
               >
                 <td class="px-4 py-3">
                   <a
                     [routerLink]="['/vehicles', vehicle.id]"
-                    class="font-semibold text-blue-600 hover:underline"
+                    class="font-semibold text-title hover:underline"
                   >
                     {{ vehicle.make }} {{ vehicle.model }}
                   </a>
                 </td>
-                <td class="px-4 py-3 text-gray-600">{{ vehicle.year }}</td>
-                <td class="px-4 py-3 text-gray-600">{{ vehicle.plateNumber }}</td>
-                <td class="px-4 py-3 text-gray-600">{{ vehicle.currentMileage | number }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ vehicle.year }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ vehicle.plateNumber }}</td>
+                <td class="px-4 py-3 font-medium text-body">{{ vehicle.currentMileage | number }}</td>
                 <td class="px-4 py-3">
                   <span
                     *ngIf="vehicle.isServiceDue"
-                    class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700"
+                    class="inline-flex items-center gap-1 rounded-full bg-pill-progress-bg px-2.5 py-0.5 text-xs font-normal text-pill-progress-text"
                   >
-                    <svg lucideIcon="triangle-alert" [size]="12" class="text-amber-600" />
+                    <svg lucideIcon="triangle-alert" [size]="12" />
                     Service Due
                   </span>
                   <span
                     *ngIf="!vehicle.isServiceDue && !vehicle.isActive"
-                    class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600"
+                    class="inline-flex items-center rounded-full bg-input px-2.5 py-0.5 text-xs font-normal text-muted"
                   >
                     Archived
                   </span>
                   <span
                     *ngIf="!vehicle.isServiceDue && vehicle.isActive"
-                    class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700"
+                    class="inline-flex items-center rounded-full bg-pill-completed-bg px-2.5 py-0.5 text-xs font-normal text-pill-completed-text"
                   >
                     Active
                   </span>
@@ -88,7 +85,7 @@ import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.compone
                     <a
                       [routerLink]="['/vehicles', vehicle.id]"
                       [attr.aria-label]="'View ' + vehicle.make + ' ' + vehicle.model"
-                      class="rounded-md p-2 text-slate-500 transition-transform duration-150 ease-out hover:scale-105 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95"
+                      class="rounded-md p-2 text-muted transition-transform duration-150 ease-out hover:scale-105 hover:bg-input hover:text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-mid active:scale-95"
                     >
                       <svg lucideIcon="eye" [size]="18" />
                     </a>
@@ -96,7 +93,7 @@ import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.compone
                       type="button"
                       [attr.aria-label]="'Edit ' + vehicle.make + ' ' + vehicle.model"
                       (click)="openEdit(vehicle, $event)"
-                      class="rounded-md p-2 text-slate-500 transition-transform duration-150 ease-out hover:scale-105 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 active:scale-95"
+                      class="rounded-md p-2 text-muted transition-transform duration-150 ease-out hover:scale-105 hover:bg-input hover:text-body focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-mid active:scale-95"
                     >
                       <svg lucideIcon="pencil" [size]="18" />
                     </button>
@@ -109,11 +106,11 @@ import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.compone
 
         <div
           *ngIf="vehicles.length === 0"
-          class="mt-6 flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 bg-white px-6 py-16 text-center"
+          class="mt-3 flex flex-col items-center justify-center rounded-card border border-dashed border-hairline bg-card px-6 py-16 text-center"
           animate.enter="fade-in-up"
         >
           <svg
-            class="h-24 w-24 text-slate-300"
+            class="h-24 w-24 text-muted"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -128,16 +125,12 @@ import { VehicleDrawerComponent } from '../vehicle-drawer/vehicle-drawer.compone
             <path d="M9 3h6" />
             <path d="M12 3v4" />
           </svg>
-          <h2 class="mt-4 text-lg font-semibold text-gray-900">No vehicles yet</h2>
-          <p class="mt-1 text-sm text-gray-500">Add your first vehicle to start tracking maintenance.</p>
-          <button
-            type="button"
-            (click)="openNew()"
-            class="mt-5 flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition-transform duration-150 ease-out hover:bg-indigo-700 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-          >
+          <h2 class="mt-4 text-lg font-medium text-title">No vehicles yet</h2>
+          <p class="mt-1 text-sm text-muted">Add your first vehicle to start tracking maintenance.</p>
+          <app-button class="mt-5" (click)="openNew()">
             <svg lucideIcon="plus" [size]="18" />
             Add Vehicle
-          </button>
+          </app-button>
         </div>
       </ng-container>
     </div>

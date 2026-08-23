@@ -1,0 +1,132 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--sidebar-width);
+  background: var(--color-hatch-pale);
+  border-radius: var(--radius-shell);
+  box-shadow: var(--shadow-shell);
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 2rem 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.sidebar-logo-icon {
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: var(--color-brand-mid);
+}
+
+.sidebar-logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-title);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 1rem 0.75rem;
+}
+
+.sidebar-section-title {
+  margin: 0.5rem 0 0.25rem;
+  padding: 0 0.75rem;
+  color: var(--color-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sidebar-section-title:first-child {
+  margin-top: 0;
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: var(--spacing-nav-item-y) 0.75rem;
+  border-radius: 9999px;
+  color: var(--color-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.nav-btn {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--color-input);
+}
+
+.nav-icon {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  transition: color 0.15s ease;
+}
+
+.nav-active .nav-icon {
+  color: var(--color-brand-mid);
+}
+
+.nav-active .nav-icon svg {
+  fill: currentColor;
+}
+
+.nav-active .nav-label {
+  font-weight: 700;
+}
+
+.nav-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 60%;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: var(--color-brand-mid);
+}
+
+.nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
