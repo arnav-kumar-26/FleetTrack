@@ -48,6 +48,14 @@ dotnet run --project .
 
 The API listens on `http://localhost:5295`. A Scalar API reference is available at `/scalar/v1` in Development.
 
+To wipe and reseed the database with the bundled demo dataset (28 vehicles / 84 maintenance logs), launch with the seed flag:
+
+```bash
+dotnet run --project . -- --seed
+```
+
+Normal launches never modify data.
+
 ## Running the frontend
 
 `ng` is not installed globally — use `npx ng` or the npm scripts from inside `frontend/fleettrack-app`.
